@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/Ooomelette/node-svn/issues"
   },
-  "homepage": "https://github.com/Ooomelette/node-svn#readme"
+  "homepage": "https://github.com/Ooomelette/node-svn#readme",
+  "dependencies": {
+    "xml2json": "^0.11.0"
+  }
 }
