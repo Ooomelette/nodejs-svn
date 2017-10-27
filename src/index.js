@@ -33,17 +33,17 @@ class subverion extends svn {
         this.command(opt)
     }
 
-    // sv
+    // svn.checkout('trunk', './', ()=>{})
     checkout() {
         let argument = Array.from(arguments);
 
         if (argument.length === 0) {
-            throw new Error('[SVN ERROR:404] input err, please input again')
+            throw new Error('[SVN ERROR:404] checkout input err, please input again')
             return false
         }
 
         if (!argument[0] && typeof argument[0] !== 'string') {
-            throw new Error('[SVN ERROR:404] params err, please input again')
+            throw new Error('[SVN ERROR:404] checkout params err, please input again')
             return false
         }
 
@@ -79,7 +79,6 @@ class subverion extends svn {
             params.callback && params.callback(err, data.lists.list)
         }
         let opt = Object.assign({ args: [path + params.path], callback: handleData }, { command: 'list' })
-
         this.command(opt)
     }
 
