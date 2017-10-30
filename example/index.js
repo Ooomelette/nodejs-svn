@@ -1,9 +1,9 @@
 const SVN = require('../src/index');
 const path = require('path')
 const svn = new SVN({
-	username: 'yangbo',
-	password: 'yangbo123',
-	root: 'svn://svn.code.anzogame.com:9528/service/zyb_front/',
+	username: 'test',
+	password: 'test123',
+	root: 'svn://test/front/',
 	debug: true,
 	cwd: path.resolve(__dirname, './'),
 	repoName: 'zyb_front', //仓库name
