@@ -8,7 +8,7 @@ nodejs-svn是svn在nodejs中的实现，旨在用nodejs控制版本，我用于�
 
 
 ```code
-  	npm install nodejs-svn -S
+  npm install nodejs-svn -S
   
 ```
 
@@ -130,6 +130,9 @@ nodejs-svn是svn在nodejs中的实现，旨在用nodejs控制版本，我用于�
 路径是字符串相加，请保证路径的正确性，特别注意root和branches的路径组合，路径请使用相对于root的路径
 nodejs参考文档： http://nodejs.cn/api/child_process.html#child_process_child_process_spawn_command_args_options
 
+
+## 后记
+如果你还满意，不妨给我一颗star，这将成为我的动力！ths！
 
 
 
