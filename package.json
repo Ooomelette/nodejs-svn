@@ -1,26 +1,30 @@
 {
-  "name": "node-svn",
+  "name": "node-subversion",
   "version": "1.0.0",
   "description": "a version controller",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ooomelette/node-svn.git"
-  },
   "keywords": [
     "svn",
     "subversion",
-    "node"
+    "node",
+    "svn interface"
   ],
-  "author": "ooomelette",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Ooomelette",
+    "email": "yangbo_9@163.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ooomelette/nodejs-svn.git"
+  },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Ooomelette/node-svn/issues"
+    "url": "https://github.com/Ooomelette/nodejs-svn/issues"
   },
-  "homepage": "https://github.com/Ooomelette/node-svn#readme",
+  "homepage": "https://github.com/Ooomelette/nodejs-svn#readme",
   "dependencies": {
     "xml2json": "^0.11.0"
   }

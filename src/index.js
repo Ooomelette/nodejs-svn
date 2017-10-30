@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const svn = require('./svn')
 const parser = require('xml2json')
 const path = require('path')
@@ -5,10 +7,12 @@ const path = require('path')
 class subverion extends svn {
     constructor(config) {
         super(config)
-        this.formatData = config.formatData || ''
+        let {cwd = path.resolve(__dirname), repoName = 'SVN'} = config
+        this.cwd = cwd
+        this.repoName = repoName    
     }
 
-    //svn.commit('-m "descript"', callback)
+    //svn.commit('-m descript', callback)
     commit(args, callback) {
         if (!args || typeof args !== 'string' || (typeof args === 'string' && args.indexOf(' ') === -1)) {
             throw new Error('[SVN ERROR:404] svn commit command desc err, please input again')
@@ -29,7 +33,7 @@ class subverion extends svn {
         let handleData = (err, data) => {
             params.callback && params.callback(err, data.info.entry);
         }
-        let opt = Object.assign({ args: [path + params.path], callback: handleData }, { command: 'info' })
+        let opt = Object.assign({ args: [path + params.path], callback: handleData, xml: true }, { command: 'info' })
         this.command(opt)
     }
 
@@ -37,59 +41,66 @@ class subverion extends svn {
     checkout() {
         let argument = Array.from(arguments);
 
-        if (argument.length === 0) {
+        if (argument.length === 0 || (!argument[0] && typeof argument[0] !== 'string')) {
             throw new Error('[SVN ERROR:404] checkout input err, please input again')
             return false
         }
 
-        if (!argument[0] && typeof argument[0] !== 'string') {
-            throw new Error('[SVN ERROR:404] checkout params err, please input again')
-            return false
-        }
+        let branches = this.root + argument[0],
+            handleData = (err, data) => {
+                if (!err) {
+                    data = 'success'
+                }
+                typeof arguments[1] === 'function' && arguments[1](err, data);
+            };
 
-        let params = this.parseArgs(argument.slice(1))
-
-        let cwd = path.resolve(__dirname),
-            branches = this.root + argument[0],
-            callback;
-
-        if (params.path) {
-            cwd = path.resolve(cwd, params.path)
-        }
-
-        if (params.callback) {
-            callback = (err, data) => {
-            	if (!err) {
-            		data = 'success'
-            	}
-                params.callback(err, data)
-            }
-        }
-
-        let opt = Object.assign({ args: [branches], callback: callback, options: { cwd: cwd }, xml: false }, { command: 'checkout' })
-
+        let opt = Object.assign({ args: [branches, this.repoName], callback: handleData, options: {cwd: this.cwd} }, { command: 'checkout' })
         this.command(opt)
     }
 
     //svn.list('http://rep/', callback)
-    list(opts) {
+    list() {
         let path = this.root
         let params = this.parseArgs(Array.from(arguments))
         let handleData = (err, data) => {
             params.callback && params.callback(err, data.lists.list)
         }
-        let opt = Object.assign({ args: [path + params.path], callback: handleData }, { command: 'list' })
+        let opt = Object.assign({ args: [path + params.path], callback: handleData, xml: true }, { command: 'list' })
         this.command(opt)
     }
 
-    switch (opts) {
-        let opt = Object.assign(opts, { command: 'switch' })
+    // svn.switch('./branches/test')
+    switch (branches, callback) {
+        if (typeof branches !== 'string') {
+            throw new Error('[SVN ERROR:404] switch params err, please input again')
+            return false
+        }
+        let opt = Object.assign({
+            args: [this.root + branches],
+            callback: callback
+        }, { command: 'switch' })
+        this.command(opt)
+    }
+
+    cleanup() {
+        let params = this.parseArgs(Array.from(arguments))
+        let handleData = (err, data) => {
+            let result = null;
+            if (!err) {
+                result = {
+                    message: 'success',
+                    data: data
+                }
+            }
+            params.callback && params.callback(err, result)
+        }
+        let opt = Object.assign( {callback: handleData }, { command: 'cleanup' })
         this.command(opt)
     }
 
     // core
     command(opts) {
-        let needxml = opts.xml === false ? false : true
+        let needxml = opts.xml
         // 处理返回的xml
         let callback = (err, data) => {
             if (typeof opts.callback === 'function') {
@@ -104,7 +115,9 @@ class subverion extends svn {
         let opt = Object.assign({
             command: '',
             args: [],
-            options: {}
+            options: {
+                cwd: path.resolve(this.cwd, this.repoName) //执行command所在的目录
+            }
         }, opts, { callback: callback })
 
         if (!opt.command) {

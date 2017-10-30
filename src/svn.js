@@ -1,15 +1,17 @@
 // svn 核心方法
 
 const spawn = require('child_process').spawn
+const path = require('path')
 class SVN {
     constructor(config) {
-        let { password = '', username = '', root = '', debug = false } = config
+        let { password = '', username = '', root = '', debug = false, cwd = path.resolve(__dirname)} = config
         this.password = password
         this.username = username
         this.root = root
         this.queues = []
         this.isRuning = false
         this.debug = debug
+        this.cwd = cwd
     }
 
     run() {
@@ -62,7 +64,7 @@ class SVN {
     }
 
     pushQueue(cmds) {
-        let { command = '', args = [], options = {}, callback = null, xml = true} = cmds;
+        let { command = '', args = [], options = {}, callback = null, xml = false} = cmds;
 
         if (callback && typeof callback !== 'function') {
             console.log('callback 参数必须是一个函数，而不是一个' + typeof callback);
@@ -72,7 +74,7 @@ class SVN {
         let opts = {
             command: 'svn',
             args: [command].concat(args),
-            options: options,
+            options: Object.assign({cwd: this.cwd}, options),
             xml: xml,
             callback: callback
         }
