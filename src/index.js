@@ -10,6 +10,7 @@ class subverion extends svn {
         let {cwd = path.resolve(__dirname), repoName = 'SVN'} = config
         this.cwd = cwd
         this.repoName = repoName    
+        this.repoPath = cwd + repoName
     }
 
     //svn.commit('-m descript', callback)
@@ -27,13 +28,18 @@ class subverion extends svn {
 
     //svn.info('http://rep/', callback)
     info() {
-        let path = this.root
+        let path = this.repoPath
         let params = this.parseArgs(Array.from(arguments))
 
         let handleData = (err, data) => {
             params.callback && params.callback(err, data.info.entry);
         }
-        let opt = Object.assign({ args: [path + params.path], callback: handleData, xml: true }, { command: 'info' })
+        if (typeof params.path === 'string' && params !== '') {
+            path = params.path
+        }
+
+
+        let opt = Object.assign({ args: [path], callback: handleData, xml: true }, { command: 'info' })
         this.command(opt)
     }
 
@@ -60,12 +66,16 @@ class subverion extends svn {
 
     //svn.list('http://rep/', callback)
     list() {
-        let path = this.root
+        let path = this.repoPath
         let params = this.parseArgs(Array.from(arguments))
         let handleData = (err, data) => {
             params.callback && params.callback(err, data.lists.list)
         }
-        let opt = Object.assign({ args: [path + params.path], callback: handleData, xml: true }, { command: 'list' })
+        if (typeof params.path === 'string' && params !== '') {
+            path = params.path
+        }
+
+        let opt = Object.assign({ args: [path], callback: handleData, xml: true }, { command: 'list' })
         this.command(opt)
     }
 
