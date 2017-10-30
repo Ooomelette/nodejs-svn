@@ -4,7 +4,7 @@ svn
 
 # Install
 
-npm install -g node-svn
+npm install nodejs-svn
 
 # Usage
 
@@ -33,15 +33,11 @@ callback
 - svm.commit('-m "descript"', callback)
 接收2两个参数，第一个参数是-m操作符和提交描述，中间必须用“空格”隔开，第二个参数为执行命令后的回掉
 
-- svn.checkout('branches', 'path', callback)
+- svn.checkout('branches', callback)
 接收3个参数，第一个参数是checkout的目录或者文件，第二个参数是把文件放在什么路径，第三个是回掉函数
 svn.checkout('trunk', '../example/', (err, data) => {
 	console.log(11111)
 })
-
--
-
-
 
 
 # 注意

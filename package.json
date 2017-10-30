@@ -1,5 +1,5 @@
 {
-  "name": "node-subversion",
+  "name": "nodejs-svn",
   "version": "1.0.0",
   "description": "a version controller",
   "keywords": [
