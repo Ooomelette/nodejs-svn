@@ -85,10 +85,19 @@ class subverion extends svn {
             throw new Error('[SVN ERROR:404] switch params err, please input again')
             return false
         }
+        let branch = branches === 'trunk' ? 'trunk' : 'branches/' + branches
         let opt = Object.assign({
-            args: [this.root + branches],
-            callback: callback
+            args: [this.root + branch],
+            callback: callback,
         }, { command: 'switch' })
+        this.command(opt)
+    }
+
+    update(callback) {
+        let opt = Object.assign({
+            args: [],
+            callback: callback
+        }, { command: 'update' })
         this.command(opt)
     }
 
@@ -113,6 +122,7 @@ class subverion extends svn {
         let needxml = opts.xml
         // 处理返回的xml
         let callback = (err, data) => {
+
             if (typeof opts.callback === 'function') {
                 let result = data
                 if (needxml) {

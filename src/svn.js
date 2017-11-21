@@ -30,7 +30,6 @@ class SVN {
         if (this.debug) {
         	console.log('[SVN COMMAND]: ' + params.command + ' ' +  params.args.join(' '))
         }
-
         let proc = spawn(params.command, params.args, params.options);
 
         // 执行成功
